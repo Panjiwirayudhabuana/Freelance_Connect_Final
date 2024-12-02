@@ -15,4 +15,9 @@ class Project extends Model
         'status',
         'detail',
     ];
+
+    public function client()
+    {
+        return $this->belongsTo(Client::class);
+    }
 }

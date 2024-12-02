@@ -16,7 +16,7 @@ return new class extends Migration
             $table->unsignedBigInteger('client_id');
             $table->string('title');
             $table->text('description');
-            $table->decimal('budget');
+            $table->double('budget');
             $table->dateTime('deadline');
             $table->enum('status',['open','in_progres','cancelled'])->default('open');
             $table->binary('detail');

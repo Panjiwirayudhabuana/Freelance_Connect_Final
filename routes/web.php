@@ -27,7 +27,8 @@ Route::get('/home',function(){
 
  
 Route::middleware(['Auth'])->group(function(){
-    
+    Route::get('/client/addproject',[ClientController::class,'index'])->name('client.addproject');
+    Route::post('/client/addproject',[ClientController::class,'add_project'])->name('client.addproject.post');
 });
 
 Route::get('/admin',[AdminController::class,'index']);
@@ -35,6 +36,8 @@ Route::get('/Freelancer',[FreelancerController::class,'index']);
 Route::get('/logout',[SesiController::class,'logout']);
 Route::get('/client/addproject',[ClientController::class,'index'])->name('client.addproject');
 Route::post('/client/addproject',[ClientController::class,'add_project'])->name('client.addproject.post');
+Route::get('/client/readproject',[ClientController::class,'read_project'])->name('client.project');
+
 
 
 

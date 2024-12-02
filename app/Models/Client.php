@@ -11,7 +11,7 @@ class Client extends Model
         'company',
         'bio'
     ];
-    // Client model
+    
     public function user() {
         return $this->belongsTo(User::class);
 }

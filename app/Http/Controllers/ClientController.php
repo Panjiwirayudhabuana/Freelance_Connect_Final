@@ -12,51 +12,39 @@ class ClientController extends Controller
         return view('client.addproject');
     }
 
-    public function add_project(Request $request) {
-        // Validasi data yang diterima
+    public function add_project(Request $request)
+    {
         $request->validate([
-            'title' => 'required|string',
-            'budget' => 'required',
-            'deadline' => 'required',
-            'detail' => 'required|file|mimes:pdf,zip,rar',
-            'description' => 'required'
+            'title' => 'required|string|max:255',
+            'budget' => 'required|numeric|min:1|max:9223372036854775807',
+            'deadline' => 'required|date',
+            'detail' => 'required|file|mimes:pdf,zip,rar|max:10240',
+            'description' => 'required|string',
         ]);
-        
-        // Ambil pengguna yang sedang login
+
         $user = Auth::user();
-    
-        // Pastikan pengguna sudah login
-        if (!$user) {
-            return redirect()->route('client.addproject')->with('error', 'You must be logged in to add a project.');
-        }
-    
-        // Ambil client yang terkait dengan pengguna
         $client = $user->client;
-    
-        // Pastikan client ada
+
         if (!$client) {
             return redirect()->route('client.addproject')->with('error', 'Client not found for the logged-in user.');
         }
-    
-        // Simpan file yang diupload
+
         $filePath = $request->file('detail')->store('uploads', 'public');
-    
-        // Buat proyek baru
-        $project = new Project();
-        $project->title = $request->title;
-        $project->budget = $request->budget;
-        $project->deadline = $request->deadline;
-        $project->detail = $filePath;
-        $project->description = $request->description;
-        $project->status = 'open';
-        $project->client_id = $client->id; // Gunakan client_id dari relasi
-    
-        // Simpan proyek
-        try {
-            $project->save();
-            return redirect()->route('client.addproject')->with('success', 'Project added successfully!');
-        } catch (\Exception $e) {
-            return redirect()->route('client.addproject')->with('error', 'Failed to add project: ' . $e->getMessage());
-        }
+
+        $project = Project::create([
+            'title' => $request->title,
+            'budget' => $request->budget,
+            'deadline' => $request->deadline,
+            'detail' => $filePath,
+            'description' => $request->description,
+            'status' => 'open',
+            'client_id' => $client->id,
+        ]);
+
+        return redirect()->route('client.addproject')->with('success', 'Project added successfully!');
     }
+    function read_project(){
+        return view('Client.readproject');
+    }
+
 }
