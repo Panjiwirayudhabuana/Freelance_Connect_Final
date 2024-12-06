@@ -16,7 +16,6 @@
                 $table->unsignedBigInteger('project_id');
                 $table->unsignedBigInteger('freelancer_id');
                 $table->unsignedBigInteger('client_id');
-                $table->decimal('amount');
                 $table->enum('status', ['pending', 'completed', 'failed'])->default('pending');
                 $table->timestamps();
 

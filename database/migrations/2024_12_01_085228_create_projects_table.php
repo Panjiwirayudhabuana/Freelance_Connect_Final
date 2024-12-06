@@ -18,8 +18,8 @@ return new class extends Migration
             $table->text('description');
             $table->double('budget');
             $table->dateTime('deadline');
-            $table->enum('status',['open','in_progres','cancelled'])->default('open');
-            $table->binary('detail');
+            $table->enum('status',['open','in progress','done','cancelled'])->default('open');
+            $table->binary('detail')->nullable();
             $table->timestamps();
 
             $table->foreign('client_id')->references('id')->on('clients')->onDelete('cascade');
