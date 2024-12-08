@@ -10,13 +10,6 @@
 
 <section class="bg-white">
     <div class="">
-        <div>
-            <h1>Hallo.... Selamat datang</h1>
-            <h1>{{ Auth::user()->name }} </h1>
-        </div>
-        <div>
-            <a href='logout'> logout </a>
-        </div>
         <h2 class="mb-4 text-xl font-bold text-gray-900 dark:gray-900">Add Project</h2>
         <form action="{{ route('client.addproject.post') }}" method="POST" enctype="multipart/form-data">
             @csrf

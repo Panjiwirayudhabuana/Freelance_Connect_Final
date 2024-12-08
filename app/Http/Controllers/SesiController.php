@@ -11,6 +11,10 @@ use Illuminate\Support\Facades\Hash;
 
 class SesiController extends Controller
 {
+    //welcome
+    function welcome(){
+        return view('welcome');
+    }
     // Login
     function index()
     {
@@ -35,7 +39,7 @@ class SesiController extends Controller
             elseif(Auth::user()->role == 'client'){
                 return redirect('/client/addproject');
             }
-            elseif(Auth::user()->role == 'Freelancer'){
+            elseif(Auth::user()->role == 'freelancer'){
                 return redirect('/freelancer');
             }
         }
@@ -47,7 +51,7 @@ class SesiController extends Controller
 
     function logout(){
         Auth::logout();
-        return redirect('login');
+        return redirect('');
     }
 
     // Register Client

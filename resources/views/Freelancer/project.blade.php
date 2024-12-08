@@ -1,7 +1,6 @@
-@extends('client.layout')
+@extends('Freelancer.layout')
 
 @section('konten')
-
 <h2 class="mb-4 text-xl font-bold text-gray-900 dark:gray-900">Project</h2>
 <div class="relative overflow-x-auto shadow-md sm:rounded-lg">
     <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
@@ -20,16 +19,13 @@
                 <td class="px-6 py-4">{{ $project->budget }}</td>
                 <td class="px-6 py-4">{{ $project->deadline }}</td>
                 <td class="px-6 py-4">
-                    <a href="{{ route('client.editproject', $project->id) }}" class="font-medium text-blue-600 dark:text-blue-500 hover:underline">Edit</a>
+                    <a href="{{ route('freelancer.show', $project->id) }}" class="font-medium text-blue-600 dark:text-blue-500 hover:underline">Detail</a>
                 </td>
             </tr>
             @endforeach
         </tbody>
     </table>
 </div>
-
-<div class="mt-4">
-    {{ $projects->links() }} <!-- Pagination links -->
-</div>
-
 @endsection
+
+

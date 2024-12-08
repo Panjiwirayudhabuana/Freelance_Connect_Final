@@ -2,16 +2,21 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Client;
 use App\Models\Project;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
 class ClientController extends Controller
 {
-    function index(){
+    // Menampilkan form untuk menambahkan proyek
+    public function index()
+    {
         return view('client.addproject');
     }
 
+    // Menambahkan proyek baru
     public function add_project(Request $request)
     {
         $request->validate([
@@ -43,8 +48,74 @@ class ClientController extends Controller
 
         return redirect()->route('client.addproject')->with('success', 'Project added successfully!');
     }
-    function read_project(){
-        return view('Client.readproject');
+
+    // Menampilkan daftar proyek
+    public function read_project()
+    {
+        $user = Auth::user();
+        $client = $user->client;
+
+        if (!$client) {
+            return redirect()->route('client.addproject')->with('error', 'Client not found for the logged-in user.');
+        }
+
+        // Ambil proyek dengan pagination
+        $projects = Project::where('client_id', $client->id)->paginate(10);
+
+        return view('client.readproject', compact('projects'));
     }
 
+    // Menampilkan form untuk mengedit proyek
+    public function edit_project($id)
+    {
+        $project = Project::findOrFail($id);
+        return view('client.editproject', compact('project'));
+    }
+
+    // Mengupdate proyek
+    public function update_project(Request $request, $id)
+    {
+        $request->validate([
+            'title' => 'required|string|max:255',
+            'budget' => 'required|numeric|min:1|max:9223372036854775807',
+            'deadline' => 'required|date',
+        ]);
+
+        $project = Project::findOrFail($id);
+        $project->title = $request->title;
+        $project->budget = $request->budget;
+        $project->deadline = $request->deadline;
+        $project->save();
+
+        return redirect()->route('client.project')->with('success', 'Project updated successfully!');
+    }
+    public function profile()
+    {
+        $user = Auth::user();
+        $client = $user->client;
+
+        return view('client.profile', compact('user', 'client'));
+    }
+
+    public function updateProfile(Request $request)
+    {
+        $request->validate([
+            'name' => 'required|string|max:255',
+            'company' => 'required|string|max:255',
+            'bio' => 'required|string',
+        ]);
+
+        $user = Auth::user();
+        $client = $user->client;
+
+        $user->name = $request->name;
+        $client->company = $request->company;
+        $client->bio = $request->bio;
+
+        $client->save();
+
+        return redirect()->route('client.profile')->with('success', 'Profile updated successfully!');
+    }
+
+    
 }
