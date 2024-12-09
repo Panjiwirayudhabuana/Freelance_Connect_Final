@@ -110,7 +110,7 @@ class SesiController extends Controller
         $user->name = $request->name;
         $user->email = $request->email;
         $user->password = Hash::make($request->password);
-        $user->role = 'client';
+        $user->role = 'freelancer';
         $user->save();
 
         $freelancer = new Freelancer();
