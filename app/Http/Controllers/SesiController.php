@@ -37,10 +37,10 @@ class SesiController extends Controller
                 return redirect('/admin');
             }
             elseif(Auth::user()->role == 'client'){
-                return redirect('/client/addproject');
+                return redirect('/client/readproject');
             }
             elseif(Auth::user()->role == 'freelancer'){
-                return redirect('/freelancer');
+                return redirect('/freelancer/projects');
             }
         }
         else{

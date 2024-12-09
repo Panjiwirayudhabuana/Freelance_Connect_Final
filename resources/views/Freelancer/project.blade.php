@@ -19,7 +19,7 @@
                 <td class="px-6 py-4">{{ $project->budget }}</td>
                 <td class="px-6 py-4">{{ $project->deadline }}</td>
                 <td class="px-6 py-4">
-                    <a href="{{ route('freelancer.show', $project->id) }}" class="font-medium text-blue-600 dark:text-blue-500 hover:underline">Detail</a>
+                    <a href="{{ route('freelancer.project', $project->id) }}" class="font-medium text-blue-600 dark:text-blue-500 hover:underline">Detail</a>
                 </td>
             </tr>
             @endforeach
