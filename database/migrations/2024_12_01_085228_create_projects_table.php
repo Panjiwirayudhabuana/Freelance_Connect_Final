@@ -18,7 +18,7 @@ return new class extends Migration
             $table->text('description');
             $table->double('budget');
             $table->dateTime('deadline');
-            $table->enum('status',['open','in progress','done','cancelled'])->default('open');
+            $table->enum('status',['open','close'])->default('open');
             $table->binary('detail')->nullable();
             $table->timestamps();
 

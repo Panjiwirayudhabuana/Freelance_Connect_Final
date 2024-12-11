@@ -28,7 +28,7 @@ class DummyProjectSeeder extends Seeder
                 'description' => 'Ini adalah deskripsi dari proyek desain website e-commerce.',
                 'budget' => 7500000,
                 'deadline' => '2023-11-15 15:30:00',
-                'status' => 'in progress'
+                'status' => 'close'
             ],
             [
                 'client_id' => 3,
@@ -44,7 +44,7 @@ class DummyProjectSeeder extends Seeder
                 'description' => 'Ini adalah deskripsi dari proyek integrasi API untuk aplikasi.',
                 'budget' => 6000000,
                 'deadline' => '2023-11-20 14:00:00',
-                'status' => 'cancelled'
+                'status' => 'close'
             ],
             [
                 'client_id' => 5,
@@ -60,7 +60,7 @@ class DummyProjectSeeder extends Seeder
                 'description' => 'Ini adalah deskripsi dari proyek pembuatan aplikasi desktop.',
                 'budget' => 8000000,
                 'deadline' => '2023-11-25 11:00:00',
-                'status' => 'in progress'
+                'status' => 'close'
             ],
             [
                 'client_id' => 2,
@@ -68,7 +68,7 @@ class DummyProjectSeeder extends Seeder
                 'description' => 'Ini adalah deskripsi dari proyek audit keamanan website.',
                 'budget' => 3000000,
                 'deadline' => '2023-10-15 16:00:00',
-                'status' => 'done'
+                'status' => 'close'
             ],
             [
                 'client_id' => 3,
@@ -84,7 +84,7 @@ class DummyProjectSeeder extends Seeder
                 'description' => 'Ini adalah deskripsi dari proyek pembuatan sistem informasi.',
                 'budget' => 9500000,
                 'deadline' => '2023-12-20 08:00:00',
-                'status' => 'in progress'
+                'status' => 'close'
             ],
             [
                 'client_id' => 5,
@@ -92,7 +92,7 @@ class DummyProjectSeeder extends Seeder
                 'description' => 'Ini adalah deskripsi dari proyek desain UI/UX untuk aplikasi.',
                 'budget' => 5500000,
                 'deadline' => '2023-11-30 17:00:00',
-                'status' => 'cancelled'
+                'status' => 'close'
             ],
             [
                 'client_id' => 1,
@@ -108,7 +108,7 @@ class DummyProjectSeeder extends Seeder
                 'description' => 'Ini adalah deskripsi dari proyek pembuatan website blog.',
                 'budget' => 3500000,
                 'deadline' => '2023-10-25 14:00:00',
-                'status' => 'in progress'
+                'status' => 'close'
             ],
             [
                 'client_id' => 3,
@@ -116,7 +116,7 @@ class DummyProjectSeeder extends Seeder
                 'description' => 'Ini adalah deskripsi dari proyek pengembangan aplikasi CRM.',
                 'budget' => 9000000,
                 'deadline' => '2023-11-10 09:30:00',
-                'status' => 'done'
+                'status' => 'close'
             ],
             [
                 'client_id' => 4,
@@ -132,7 +132,7 @@ class DummyProjectSeeder extends Seeder
                 'description' => 'Ini adalah deskripsi dari proyek desain logo untuk startup.',
                 'budget' => 2000000,
                 'deadline' => '2023-11-12 10:45:00',
-                'status' => 'in progress'
+                'status' => 'close'
             ],
             [
                 'client_id' => 1,
@@ -140,7 +140,7 @@ class DummyProjectSeeder extends Seeder
                 'description' => 'Ini adalah deskripsi dari proyek pengembangan sistem e-learning.',
                 'budget' => 11000000,
                 'deadline' => '2023-12-25 13:00:00',
-                'status' => 'cancelled'
+                'status' => 'close'
             ],
             [
                 'client_id' => 2,
@@ -156,7 +156,7 @@ class DummyProjectSeeder extends Seeder
                 'description' => 'Ini adalah deskripsi dari proyek pengembangan website katalog.',
                 'budget' => 4000000,
                 'deadline' => '2023-10-28 12:30:00',
-                'status' => 'in progress'
+                'status' => 'close'
             ],
             [
                 'client_id' => 4,
@@ -164,7 +164,7 @@ class DummyProjectSeeder extends Seeder
                 'description' => 'Ini adalah deskripsi dari proyek pembuatan sistem booking online.',
                 'budget' => 8500000,
                 'deadline' => '2023-11-18 14:30:00',
-                'status' => 'done'
+                'status' => 'close'
             ],
             [
                 'client_id' => 5,
@@ -180,7 +180,7 @@ class DummyProjectSeeder extends Seeder
                 'description' => 'Ini adalah deskripsi dari proyek pengembangan sistem pembayaran.',
                 'budget' => 9500000,
                 'deadline' => '2023-11-29 11:00:00',
-                'status' => 'in progress'
+                'status' => 'close'
             ],
             [
                 'client_id' => 2,
@@ -188,7 +188,7 @@ class DummyProjectSeeder extends Seeder
                 'description' => 'Ini adalah deskripsi dari proyek pembuatan website portfolio.',
                 'budget' => 3000000,
                 'deadline' => '2023-10-20 09:00:00',
-                'status' => 'cancelled'
+                'status' => 'close'
             ],
             [
                 'client_id' => 3,
@@ -204,7 +204,7 @@ class DummyProjectSeeder extends Seeder
                 'description' => 'Ini adalah deskripsi dari proyek pembuatan sistem reservasi.',
                 'budget' => 8000000,
                 'deadline' => '2023-11-27 13:00:00',
-                'status' => 'in progress'
+                'status' => 'close'
             ],
             [
                 'client_id' => 5,
@@ -212,7 +212,7 @@ class DummyProjectSeeder extends Seeder
                 'description' => 'Ini adalah deskripsi dari proyek desain aplikasi e-commerce.',
                 'budget' => 7000000,
                 'deadline' => '2023-12-30  12:00:00',
-                'status' => 'done'
+                'status' => 'close'
             ],
             [
                 'client_id' => 1,
@@ -228,7 +228,7 @@ class DummyProjectSeeder extends Seeder
                 'description' => 'Ini adalah deskripsi dari proyek pembuatan aplikasi kesehatan.',
                 'budget' => 6500000,
                 'deadline' => '2023-12-05 09:30:00',
-                'status' => 'in progress'
+                'status' => 'close'
             ],
             [
                 'client_id' => 3,
@@ -236,7 +236,7 @@ class DummyProjectSeeder extends Seeder
                 'description' => 'Ini adalah deskripsi dari proyek pengembangan sistem e-commerce.',
                 'budget' => 11000000,
                 'deadline' => '2023-11-22 11:00:00',
-                'status' => 'cancelled'
+                'status' => 'close'
             ],
             [
                 'client_id' => 4,
@@ -252,7 +252,7 @@ class DummyProjectSeeder extends Seeder
                 'description' => 'Ini adalah deskripsi dari proyek desain website pribadi.',
                 'budget' => 4000000,
                 'deadline' => '2023-11-30 15:00:00',
-                'status' => 'in progress'
+                'status' => 'close'
             ]
 
         ];

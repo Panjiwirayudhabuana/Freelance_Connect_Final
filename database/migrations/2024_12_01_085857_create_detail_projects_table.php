@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
             $table->unsignedBigInteger('project_id');
             $table->unsignedBigInteger('freelancer_id');
-            $table->enum('status',['pending','accepted','rejected'])->default('pending');
+            $table->enum('status',['in progress','done','cancelled'])->default('in progress');
             $table->binary('submission')->nullable();
             $table->timestamps();
 

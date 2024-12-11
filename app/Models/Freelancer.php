@@ -15,4 +15,10 @@ class Freelancer extends Model
         'bio',
         'rekening'
     ];
+    
+    public function projects()
+    {
+        return $this->belongsToMany(Project::class, 'detail_projects', 'freelancer_id', 'project_id');
+    }
+    
 }

@@ -3,10 +3,12 @@
 namespace App\Http\Controllers;
 
 use App\Models\Client;
+use App\Models\DetailProject;
 use App\Models\Project;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 
 class ClientController extends Controller
 {
@@ -60,10 +62,22 @@ class ClientController extends Controller
         }
 
         // Ambil proyek dengan pagination
-        $projects = Project::where('client_id', $client->id)->paginate(10);
+        $projects = Project::with('freelancers')
+        ->get()
+        ->map(function ($project) {
+            return [
+                'title' => $project->title,
+                'budget' => $project->budget,
+                'deadline' => $project->deadline,
+                'status' => $project->status,
+                'freelancers' => $project->freelancers->pluck('first_name')
+            ];
+        });
+
 
         return view('client.readproject', compact('projects'));
     }
+
 
     // Menampilkan form untuk mengedit proyek
     public function edit_project($id)

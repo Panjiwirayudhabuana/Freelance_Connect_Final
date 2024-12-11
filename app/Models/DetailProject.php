@@ -13,4 +13,10 @@ class DetailProject extends Model
         'submission',
         'status'
     ];
+
+    public function freelancer()
+    {
+        return $this->belongsTo(Freelancer::class, 'freelancer_id', 'freelancer_id');
+    }
 }
+

@@ -22,31 +22,15 @@ class SesiController extends Controller
     }
 
     function login(Request $request){
-        $request->validate([
-            'email' => 'required',
-            'password' => 'required'
-        ]);
+        $credentials = $request->only('email', 'password');
 
-        $infologin = [
-            'email'=>$request->email,
-            'password'=>$request->password,
-        ];
-
-        if(Auth::attempt($infologin)){
-            if(Auth::user()->role == 'admin'){
-                return redirect('/admin');
-            }
-            elseif(Auth::user()->role == 'client'){
-                return redirect('/client/readproject');
-            }
-            elseif(Auth::user()->role == 'freelancer'){
-                return redirect('/freelancer/projects');
-            }
-        }
-        else{
-            return redirect('')->withErrors('Invalid Credencial')->withInput();
+        if (Auth::attempt($credentials)) {
+            // Jika login berhasil
+            return redirect()->intended('/client/readproject');
         }
 
+        // Jika login gagal
+        return redirect()->route('login')->with('error', 'Username atau password salah.');
     }
 
     function logout(){
@@ -84,11 +68,41 @@ class SesiController extends Controller
         $client->user_id = $user->id;
         $client->save(); 
     
-        return redirect('/')->with('success', 'Client registered successfully!');
+        return redirect('/login')->with('success', 'Client registered successfully!');
     }
 
     function register_freelancer(){
         return view('registerfreelancer');
+    }
+
+    function freelancer_info(){
+        return view('freelancerinfo');
+    }
+
+    function add_freelancer_info(Request $request){
+        $request->validate([
+            'first_name' => 'required|string', // Validasi untuk company
+            'last_name' => 'required|string', // Validasi untuk bio
+            'experience' => 'required|string',
+            'skills' => 'required|string',
+            'bio' => 'required|string',
+            'rekening' => 'required|string',
+
+            
+        ]);
+
+        $freelancer = new Freelancer();
+        $freelancer->first_name = $request->first_name;
+        $freelancer->last_name = $request->last_name;
+        $freelancer->experience = $request->experience;
+        $freelancer->skills = $request->skills;
+        $freelancer->bio = $request->bio;
+        $freelancer->rekening = $request->rekening;
+        $freelancer->user_id = Auth::id();
+        $freelancer->save();
+
+        return redirect('/login')->with('success', 'Client data is added!');
+
     }
 
     function add_freelancer(Request $request){
@@ -98,32 +112,16 @@ class SesiController extends Controller
             'email' => 'required|string|unique:users,email',
             'password' => 'required|string|min:8',
             'repeat-password' => 'required|string|same:password',
-            'first_name' => 'required|string', // Validasi untuk company
-            'last_name' => 'required|string', // Validasi untuk bio
-            'experience' => 'required|string',
-            'skills' => 'required|string',
-            'bio' => 'required|string',
-            'rekening' => 'required|string',
         ]);
 
         $user = new User();
         $user->name = $request->name;
         $user->email = $request->email;
         $user->password = Hash::make($request->password);
-        $user->role = 'client';
+        $user->role = 'freelancer';
         $user->save();
 
-        $freelancer = new Freelancer();
-        $freelancer->first_name = $request->first_name;
-        $freelancer->last_name = $request->last_name;
-        $freelancer->experience = $request->experience;
-        $freelancer->skills = $request->skills;
-        $freelancer->bio = $request->bio;
-        $freelancer->rekening = $request->rekening;
-        $freelancer ->user_id = $user->id;
-        $freelancer->save();
-
-        return redirect('/')->with('success', 'Client registered successfully!');
+        return redirect('/registerfreelancer/info')->with('success', 'Client registered successfully!');
     }
 }
 

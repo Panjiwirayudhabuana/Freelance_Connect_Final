@@ -7,7 +7,7 @@ use App\Http\Controllers\SesiController;
 use Illuminate\Support\Facades\Route;
 use Symfony\Component\Mailer\Transport\Smtp\Auth\LoginAuthenticator;
 
-//login
+//authentication
 Route::get('/admin',[AdminController::class,'index']);
 Route::get('/logout',[SesiController::class,'logout'])->name('logout');
 Route::get('/login',[SesiController::class,'index'])->name('login');
@@ -16,6 +16,11 @@ Route::get('/registerclient',[SesiController::class,'register_client'])->name('r
 Route::post('/registerclient',[SesiController::class,'add_client']);
 Route::get('/registerfreelancer',[SesiController::class,'register_freelancer'])->name('register_freelancer');
 Route::post('/registerfreelancer',[SesiController::class,'add_freelancer']);
+Route::post('/registerfreelancer/info',[SesiController::class,'add_freelancer_info'])->name('freelancer_info');
+Route::get('/registerfreelancer/info',[SesiController::class,'freelancer_info']);
+
+
+
 
 //guest
 Route::get('/',[SesiController::class,'welcome'])->name('welcome');
@@ -28,11 +33,11 @@ Route::get('/home',function(){
 Route::get('/client/addproject', [ClientController::class, 'index'])->name('client.addproject');
 Route::post('/client/addproject', [ClientController::class, 'add_project'])->name('client.addproject.post');
 Route::get('/client/readproject', [ClientController::class, 'read_project'])->name('client.project');
+Route::get('/client/readproject/onprogress', [ClientController::class, 'project_on_progress'])->name('client.project.onprogress');
 Route::get('/client/editproject/{id}', [ClientController::class, 'edit_project'])->name('client.editproject');
 Route::put('/client/updateproject/{id}', [ClientController::class, 'update_project'])->name('client.updateproject');
 Route::get('/client/profile', [ClientController::class, 'profile'])->name('client.profile');
 Route::post('/client/profile', [ClientController::class, 'updateProfile'])->name('client.profile.update');
-
 
 
 

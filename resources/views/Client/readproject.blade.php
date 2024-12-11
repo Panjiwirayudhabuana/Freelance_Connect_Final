@@ -1,8 +1,12 @@
 @extends('client.layout')
 
 @section('konten')
+<div class="flex justify-between">
+    <div>
+        <h2 class="mb-4 text-4xl font-bold text-gray-900 dark:gray-900">Project</h2>
+    </div>
+</div>
 
-<h2 class="mb-4 text-xl font-bold text-gray-900 dark:gray-900">Project</h2>
 <div class="relative overflow-x-auto shadow-md sm:rounded-lg">
     <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
         <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
@@ -10,6 +14,8 @@
                 <th scope="col" class="px-6 py-3">Title</th>
                 <th scope="col" class="px-6 py-3">Budget</th>
                 <th scope="col" class="px-6 py-3">Deadline</th>
+                <th scope="col" class="px-6 py-3">Freelancer</th>
+                <th scope="col" class="px-6 py-3">Status</th>
                 <th scope="col" class="px-6 py-3">Action</th>
             </tr>
         </thead>
@@ -19,8 +25,14 @@
                 <td class="px-6 py-4">{{ $project->title }}</td>
                 <td class="px-6 py-4">{{ $project->budget }}</td>
                 <td class="px-6 py-4">{{ $project->deadline }}</td>
+                <td class="px-6 py-4">{{ $project->freelancer ? $project->freelancer->name : 'Belum ditugaskan' }}</td>
+                <td class="px-6 py-4">{{ $project->status }}</td>
                 <td class="px-6 py-4">
-                    <a href="{{ route('client.editproject', $project->id) }}" class="font-medium text-blue-600 dark:text-blue-500 hover:underline">Edit</a>
+                    @if($project->status == 'close')
+                        <a href="" class="font-medium text-green-600 dark:text-green-500 hover:underline">Detail</a>
+                    @else
+                        <a href="{{ route('client.editproject', $project->id) }}" class="font-medium text-blue-600 dark:text-blue-500 hover:underline">Edit</a>
+                    @endif
                 </td>
             </tr>
             @endforeach
@@ -28,8 +40,8 @@
     </table>
 </div>
 
-<div class="mt-4">
+{{-- <div class="mt-4">
     {{ $projects->links() }} <!-- Pagination links -->
-</div>
+</div> --}}
 
 @endsection

@@ -20,4 +20,14 @@ class Project extends Model
     {
         return $this->belongsTo(Client::class);
     }
+
+    public function detailProjects()
+    {
+        return $this->hasMany(DetailProject::class, 'project_id', 'project_id');
+    }
+
+    public function freelancers()
+    {
+        return $this->belongsToMany(Freelancer::class, 'detail_projects', 'project_id', 'freelancer_id');
+    }
 }
