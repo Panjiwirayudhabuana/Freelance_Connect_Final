@@ -13,15 +13,11 @@
         {
             Schema::create('payments', function (Blueprint $table) {
                 $table->id();
-                $table->unsignedBigInteger('project_id');
-                $table->unsignedBigInteger('freelancer_id');
-                $table->unsignedBigInteger('client_id');
-                $table->enum('status', ['pending', 'completed', 'failed'])->default('pending');
+                $table->unsignedBigInteger('detail_project_id');
+                $table->enum('status', ['not yet', 'pending', 'completed', 'failed'])->default('not yet');
                 $table->timestamps();
 
-                $table->foreign('project_id')->references('id')->on('projects')->onDelete('cascade');
-                $table->foreign('freelancer_id')->references('id')->on('freelancers')->onDelete('cascade');
-                $table->foreign('client_id')->references('id')->on('clients')->onDelete('cascade');
+                $table->foreign('detail_project_id')->references('id')->on('detail_projects')->onDelete('cascade');
             });
         }
 

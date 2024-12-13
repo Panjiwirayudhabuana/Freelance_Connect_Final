@@ -4,11 +4,13 @@ namespace App\Http\Controllers;
 
 use App\Models\Client;
 use App\Models\DetailProject;
+use App\Models\Payment;
 use App\Models\Project;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 
 class ClientController extends Controller
 {
@@ -21,62 +23,69 @@ class ClientController extends Controller
     // Menambahkan proyek baru
     public function add_project(Request $request)
     {
+        // Validasi minimal 3 hari dari sekarang
+        $minDeadline = date('Y-m-d', strtotime('+3 days'));
+        
         $request->validate([
             'title' => 'required|string|max:255',
-            'budget' => 'required|numeric|min:1|max:9223372036854775807',
-            'deadline' => 'required|date',
-            'detail' => 'required|file|mimes:pdf,zip,rar|max:10240',
             'description' => 'required|string',
+            'budget' => 'required|numeric|min:1',
+            'deadline' => 'required|date|after_or_equal:' . $minDeadline,
+        ], [
+            'deadline.after_or_equal' => 'Deadline minimal 3 hari dari sekarang.',
         ]);
 
         $user = Auth::user();
         $client = $user->client;
 
         if (!$client) {
-            return redirect()->route('client.addproject')->with('error', 'Client not found for the logged-in user.');
+            return redirect()->route('client.addproject')->with('error', 'Client not found.');
         }
 
-        $filePath = $request->file('detail')->store('uploads', 'public');
+        if ($request->hasFile('detail')) {
+            $filePath = $request->file('detail')->store('project-details', 'public');
+        }
 
         $project = Project::create([
             'title' => $request->title,
             'budget' => $request->budget,
             'deadline' => $request->deadline,
-            'detail' => $filePath,
+            'detail' => $filePath ?? null,
             'description' => $request->description,
             'status' => 'open',
             'client_id' => $client->id,
         ]);
 
-        return redirect()->route('client.addproject')->with('success', 'Project added successfully!');
+        return redirect()->route('client.addproject')->with('success', 'Project berhasil ditambahkan!');
     }
 
     // Menampilkan daftar proyek
     public function read_project()
     {
         $user = Auth::user();
-        $client = $user->client;
-
-        if (!$client) {
-            return redirect()->route('client.addproject')->with('error', 'Client not found for the logged-in user.');
+        
+        if (!$user || !$user->client) {
+            return redirect()->route('client.addproject')
+                ->with('error', 'Silakan lengkapi profil client Anda terlebih dahulu.');
         }
 
-        // Ambil proyek dengan pagination
-        $projects = Project::with('freelancers')
-        ->get()
-        ->map(function ($project) {
-            return [
-                'title' => $project->title,
-                'budget' => $project->budget,
-                'deadline' => $project->deadline,
-                'status' => $project->status,
-                'freelancers' => $project->freelancers->pluck('first_name')
-            ];
-        });
-
+        $projects = Project::select(
+            'projects.id', 
+            'projects.title', 
+            'projects.budget', 
+            'projects.deadline', 
+            'projects.status', 
+            'freelancers.first_name',
+            'detail_projects.submission'
+        )
+            ->leftJoin('detail_projects', 'projects.id', '=', 'detail_projects.project_id')
+            ->leftJoin('freelancers', 'freelancers.id', '=', 'detail_projects.freelancer_id')
+            ->where('projects.client_id', $user->client->id)
+            ->get();
 
         return view('client.readproject', compact('projects'));
     }
+
 
 
     // Menampilkan form untuk mengedit proyek
@@ -89,10 +98,17 @@ class ClientController extends Controller
     // Mengupdate proyek
     public function update_project(Request $request, $id)
     {
+        // Validasi minimal 3 hari dari sekarang
+        $minDeadline = date('Y-m-d H:i:s', strtotime('+3 days'));
+        
         $request->validate([
             'title' => 'required|string|max:255',
-            'budget' => 'required|numeric|min:1|max:9223372036854775807',
-            'deadline' => 'required|date',
+            'description' => 'required|string',
+            'budget' => 'required|numeric|min:1',
+            'deadline' => 'required|date|after_or_equal:' . $minDeadline,
+            'role' => 'required|in:open,in progress,done,cancelled'
+        ], [
+            'deadline.after_or_equal' => 'Deadline minimal 3 hari dari sekarang.',
         ]);
 
         $project = Project::findOrFail($id);
@@ -131,5 +147,66 @@ class ClientController extends Controller
         return redirect()->route('client.profile')->with('success', 'Profile updated successfully!');
     }
 
+    public function detail_project($id)
+    {
+        $project = DB::table('projects')
+            ->leftJoin('detail_projects', 'projects.id', '=', 'detail_projects.project_id')
+            ->leftJoin('freelancers', 'detail_projects.freelancer_id', '=', 'freelancers.id')
+            ->select(
+                'projects.*',
+                'detail_projects.id as detail_id',
+                'detail_projects.submission',
+                'detail_projects.status',
+                'freelancers.first_name',
+                'freelancers.last_name'
+            )
+            ->where('projects.id', $id)
+            ->first();
+
+        return view('client.detailproject', compact('project'));
+    }
+
+    public function payment()
+    {
+        $user = Auth::user();
+        Log::info('User authenticated:', ['user_id' => $user ? $user->id : 'null']);
+
+        if (!$user) {
+            return redirect()->route('login')
+                ->with('error', 'Silakan login terlebih dahulu.');
+        }
+
+        $client = $user->client;
+        Log::info('Client data:', ['client_id' => $client ? $client->id : 'null']);
+
+        if (!$client) {
+            return redirect()->route('client.profile')
+                ->with('error', 'Silakan lengkapi profil client Anda terlebih dahulu.');
+        }
+
+        // Inisialisasi $payments sebagai collection kosong
+        $payments = collect();
+
+        $payments = DB::table('payments')
+                ->join('detail_projects', 'payments.detail_project_id', '=', 'detail_projects.id')
+                ->join('projects', 'detail_projects.project_id', '=', 'projects.id')
+                ->leftJoin('freelancers', 'detail_projects.freelancer_id', '=', 'freelancers.id')
+                ->where('projects.client_id', $client->id)
+                ->select(
+                    'payments.status as payment_status',
+                    'projects.title as project_title',
+                    'projects.budget as project_budget',
+                    DB::raw('COALESCE(freelancers.first_name, "Not Assigned") as freelancer_name')
+                )
+                ->get();
+
+        return view('client.payment', compact('payments'));
     
+    }
+
+    public function detail_payment($id)
+    {
+        $payment = Payment::findOrFail($id);
+        return view('client.detailpayment', compact('payment'));
+    }
 }

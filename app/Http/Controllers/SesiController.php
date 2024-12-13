@@ -22,15 +22,31 @@ class SesiController extends Controller
     }
 
     function login(Request $request){
-        $credentials = $request->only('email', 'password');
+        $request->validate([
+            'email' => 'required',
+            'password' => 'required'
+        ]);
 
-        if (Auth::attempt($credentials)) {
-            // Jika login berhasil
-            return redirect()->intended('/client/readproject');
+        $infologin = [
+            'email'=>$request->email,
+            'password'=>$request->password,
+        ];
+
+        if(Auth::attempt($infologin)){
+            if(Auth::user()->role == 'admin'){
+                return redirect('/listprojects');
+            }
+            elseif(Auth::user()->role == 'client'){
+                return redirect('/client/readproject');
+            }
+            elseif(Auth::user()->role == 'freelancer'){
+                return redirect('/freelancer/projects');
+            }
+        }
+        else{
+            return redirect('')->withErrors('Invalid Credencial')->withInput();
         }
 
-        // Jika login gagal
-        return redirect()->route('login')->with('error', 'Username atau password salah.');
     }
 
     function logout(){

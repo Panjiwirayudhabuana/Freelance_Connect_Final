@@ -20,10 +20,25 @@ class DummyDetailProjectSeeder extends Seeder
                 'status' => 'in progress',
             ],   
             [
-                'project_id' => 3,
+                'project_id' => 6,
                 'freelancer_id' => 1, 
-                'status' => 'in progress',
-            ],       
+                'status' => 'done',
+            ],
+            [
+                'project_id' => 11,
+                'freelancer_id' => 1, 
+                'status' => 'done',
+            ],   
+            [
+                'project_id' => 16,
+                'freelancer_id' => 1, 
+                'status' => 'cancelled',
+            ],  
+            [
+                'project_id' => 21,
+                'freelancer_id' => 1, 
+                'status' => 'done',
+            ],  
         ];
 
         foreach($DetailProjectData as $key => $val){

@@ -18,7 +18,6 @@ return new class extends Migration
             $table->enum('status',['in progress','done','cancelled'])->default('in progress');
             $table->binary('submission')->nullable();
             $table->timestamps();
-
             $table->foreign('project_id')->references('id')->on('projects')->onDelete('cascade');
             $table->foreign('freelancer_id')->references('id')->on('freelancers')->onDelete('cascade');
         });

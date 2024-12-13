@@ -1,8 +1,10 @@
 <?php
 
+use App\Http\Controllers\Admin\ProjectController;
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\ClientController;
 use App\Http\Controllers\FreelancerController;
+use App\Http\Controllers\ListClientController;
 use App\Http\Controllers\SesiController;
 use Illuminate\Support\Facades\Route;
 use Symfony\Component\Mailer\Transport\Smtp\Auth\LoginAuthenticator;
@@ -18,8 +20,6 @@ Route::get('/registerfreelancer',[SesiController::class,'register_freelancer'])-
 Route::post('/registerfreelancer',[SesiController::class,'add_freelancer']);
 Route::post('/registerfreelancer/info',[SesiController::class,'add_freelancer_info'])->name('freelancer_info');
 Route::get('/registerfreelancer/info',[SesiController::class,'freelancer_info']);
-
-
 
 
 //guest
@@ -38,6 +38,11 @@ Route::get('/client/editproject/{id}', [ClientController::class, 'edit_project']
 Route::put('/client/updateproject/{id}', [ClientController::class, 'update_project'])->name('client.updateproject');
 Route::get('/client/profile', [ClientController::class, 'profile'])->name('client.profile');
 Route::post('/client/profile', [ClientController::class, 'updateProfile'])->name('client.profile.update');
+Route::get('/client/project/{id}/detail', [ClientController::class, 'detail_project'])->name('client.detailproject');
+Route::get('/project/{id}', [ProjectController::class, 'show'])->name('client.project.show');
+Route::get('/download-submission/{project}', [ProjectController::class, 'downloadSubmission'])->name('download.submission');
+Route::get('/client/payment', [ClientController::class, 'payment'])->name('client.payment');
+Route::get('/client/payment/{id}', [ClientController::class, 'detail_payment'])->name('client.detailpayment');
 
 
 
@@ -48,6 +53,24 @@ Route::get('/freelancer/projects', [FreelancerController::class, 'read_all_proje
 Route::get('/freelancer/profile', [FreelancerController::class, 'showProfile'])->name('user.profile');
 Route::get('/profile/edit/{id}', [FreelancerController::class, 'edit'])->name('user.edit');
 Route::put('/profile/update/{id}', [FreelancerController::class, 'update'])->name('user.update');
+Route::post('/freelancer/project/{id}/accept', [FreelancerController::class, 'acceptProject'])->name('freelancer.accept_project');
+Route::get('/freelancer/ongoing-projects', [FreelancerController::class, 'showOngoingProjects'])->name('freelancer.ongoing_projects');
+Route::get('/freelancer/ongoing/{id}', [FreelancerController::class, 'detailOngoing'])->name('freelancer.detail_ongoing');
+Route::post('/freelancer/submit-project/{id}', [FreelancerController::class, 'submitProject'])->name('freelancer.submit_project');
+Route::post('/freelancer/update-status/{id}', [FreelancerController::class, 'updateStatus'])->name('freelancer.update_status');
+Route::get('/freelancer/submission/{id}/download', [FreelancerController::class, 'downloadSubmission'])
+    ->name('freelancer.download_submission');
+
+
+//Admin
+Route::get('/listprojects', [ProjectController::class, 'index'])->name('listproject');
+Route::get('/listfreelancers', [FreelancerController::class, 'index'])->name('listfreelancer');
+Route::get('/listclients', [ListClientController::class, 'index'])->name('listclient');
+Route::delete('destroyproject{id}', [ProjectController::class, 'destroy'])->name('projects.destroy');
+Route::delete('destroyclient{id}', [ListClientController::class, 'destroy'])->name('clients.destroy');
+Route::delete('destroyfrelancer{id}', [FreelancerController::class, 'destroy'])->name('freelancers.destroy');
+// Route::get('/', [AdminController::class, 'index'])->name('admin.index');
+
 
 
 

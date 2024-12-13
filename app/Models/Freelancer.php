@@ -20,5 +20,10 @@ class Freelancer extends Model
     {
         return $this->belongsToMany(Project::class, 'detail_projects', 'freelancer_id', 'project_id');
     }
+
+    public function detailProject()
+    {
+        return $this->hasOne(DetailProject::class);
+    }
     
 }

@@ -10,13 +10,18 @@ class DetailProject extends Model
         'project_id',
         'freelancer_id',
         'status',
-        'submission',
-        'status'
+        'created_at',
+        'updated_at'
     ];
+
+    public function project()
+    {
+        return $this->belongsTo(Project::class, 'project_id');
+    }
 
     public function freelancer()
     {
-        return $this->belongsTo(Freelancer::class, 'freelancer_id', 'freelancer_id');
+        return $this->belongsTo(User::class, 'freelancer_id');
     }
 }
 
