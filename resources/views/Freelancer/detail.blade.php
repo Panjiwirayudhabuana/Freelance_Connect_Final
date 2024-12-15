@@ -37,7 +37,31 @@
         @endif
     </div>
 
+<<<<<<< Updated upstream
     <a href="{{ route('freelancer.show') }}" class="inline-block mt-4 px-6 py-2 text-white bg-blue-600 rounded-lg hover:bg-blue-700">
+=======
+    @if ($project->attachment)
+        <div class="mb-6">
+            <h3 class="text-lg font-semibold text-gray-800 dark:text-white mb-2">File Lampiran</h3>
+            <a href="{{ asset('storage/' . $project->attachment) }}" 
+               class="inline-block px-4 py-2 text-white bg-blue-600 rounded-lg hover:bg-blue-800"
+               download>
+               Download File
+            </a>
+        </div>
+    @endif
+
+    @if ($project->status === 'open')
+        <form action="{{ route('freelancer.accept_project', $project->id) }}" method="POST">
+            @csrf
+            <button type="submit" class="inline-block px-6 py-2 text-white bg-green-500 rounded-lg hover:bg-green-700">
+                Terima Proyek
+            </button>
+        </form>
+    @endif
+
+    <a href="{{ route('freelancer.showproject') }}" class="inline-block mt-4 px-6 py-2 text-white bg-blue-800 rounded-lg hover:bg-blue-900">
+>>>>>>> Stashed changes
         Kembali ke Daftar Proyek
     </a>
 </div>

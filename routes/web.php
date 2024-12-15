@@ -39,10 +39,28 @@ Route::post('/client/profile', [ClientController::class, 'updateProfile'])->name
 //freelancer
 Route::get('/Freelancer',[FreelancerController::class,'index']);
 Route::get('/freelancer/projects/{id}', [FreelancerController::class, 'show'])->name('freelancer.project');
-Route::get('/freelancer/projects', [FreelancerController::class, 'read_all_project'])->name('freelancer.show');
+Route::get('/freelancer/projects', [FreelancerController::class, 'read_all_project'])->name('freelancer.showproject');
 Route::get('/freelancer/profile', [FreelancerController::class, 'showProfile'])->name('user.profile');
 Route::get('/profile/edit/{id}', [FreelancerController::class, 'edit'])->name('user.edit');
 Route::put('/profile/update/{id}', [FreelancerController::class, 'update'])->name('user.update');
+Route::post('/freelancer/project/{id}/accept', [FreelancerController::class, 'acceptProject'])->name('freelancer.accept_project');
+Route::get('/freelancer/ongoing-projects', [FreelancerController::class, 'showOngoingProjects'])->name('freelancer.ongoing_projects');
+Route::get('/freelancer/ongoing/{id}', [FreelancerController::class, 'detailOngoing'])->name('freelancer.detail_ongoing');
+Route::post('/freelancer/submit-project/{id}', [FreelancerController::class, 'submitProject'])->name('freelancer.submit_project');
+Route::post('/freelancer/update-status/{id}', [FreelancerController::class, 'updateStatus'])->name('freelancer.update_status');
+Route::get('/freelancer/submission/{id}/download', [FreelancerController::class, 'downloadSubmission'])
+    ->name('freelancer.download_submission');
+
+
+//Admin
+Route::get('/listprojects', [ProjectController::class, 'index'])->name('listproject');
+Route::get('/listfreelancers', [FreelancerController::class, 'index'])->name('listfreelancer');
+Route::get('/listclients', [ListClientController::class, 'index'])->name('listclient');
+Route::delete('destroyproject{id}', [ProjectController::class, 'destroy'])->name('projects.destroy');
+Route::delete('destroyclient{id}', [ListClientController::class, 'destroy'])->name('clients.destroy');
+Route::delete('destroyfrelancer{id}', [FreelancerController::class, 'destroy'])->name('freelancers.destroy');
+// Route::get('/', [AdminController::class, 'index'])->name('admin.index');
+
 
 
 
