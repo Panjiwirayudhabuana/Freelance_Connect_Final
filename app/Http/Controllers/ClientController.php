@@ -31,32 +31,49 @@ class ClientController extends Controller
             'description' => 'required|string',
             'budget' => 'required|numeric|min:1',
             'deadline' => 'required|date|after_or_equal:' . $minDeadline,
+            'detail' => 'required|mimes:pdf|max:5120', // Maksimal 5MB, hanya PDF
         ], [
             'deadline.after_or_equal' => 'Deadline minimal 3 hari dari sekarang.',
+            'detail.required' => 'File detail project wajib diupload.',
+            'detail.mimes' => 'File detail harus berformat PDF.',
+            'detail.max' => 'Ukuran file detail maksimal 5MB.',
         ]);
 
-        $user = Auth::user();
-        $client = $user->client;
+        try {
+            $user = Auth::user();
+            $client = $user->client;
 
-        if (!$client) {
-            return redirect()->route('client.addproject')->with('error', 'Client not found.');
+            if (!$client) {
+                return redirect()->route('client.addproject')
+                    ->with('error', 'Client not found.');
+            }
+
+            // Upload dan simpan file detail
+            if ($request->hasFile('detail')) {
+                $file = $request->file('detail');
+                $fileName = time() . '_' . $file->getClientOriginalName();
+                // Simpan file ke storage/app/public/detail
+                $filePath = $file->storeAs('detail', $fileName, 'public');
+            }
+
+            $project = Project::create([
+                'title' => $request->title,
+                'budget' => $request->budget,
+                'deadline' => $request->deadline,
+                'detail' => $filePath ?? null,
+                'description' => $request->description,
+                'status' => 'open',
+                'client_id' => $client->id,
+            ]);
+
+            return redirect()->route('client.addproject')
+                ->with('success', 'Project berhasil ditambahkan!');
+
+        } catch (\Exception $e) {
+            return redirect()->route('client.addproject')
+                ->with('error', 'Terjadi kesalahan: ' . $e->getMessage())
+                ->withInput();
         }
-
-        if ($request->hasFile('detail')) {
-            $filePath = $request->file('detail')->store('project-details', 'public');
-        }
-
-        $project = Project::create([
-            'title' => $request->title,
-            'budget' => $request->budget,
-            'deadline' => $request->deadline,
-            'detail' => $filePath ?? null,
-            'description' => $request->description,
-            'status' => 'open',
-            'client_id' => $client->id,
-        ]);
-
-        return redirect()->route('client.addproject')->with('success', 'Project berhasil ditambahkan!');
     }
 
     // Menampilkan daftar proyek

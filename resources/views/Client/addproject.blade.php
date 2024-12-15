@@ -20,7 +20,7 @@
                 </h2>
             </div>
 
-            <form action="{{ route('client.addproject.post') }}" method="POST" class="p-8">
+            <form action="{{ route('client.addproject.post') }}" method="POST" enctype="multipart/form-data" class="p-8">
                 @csrf
                 
                 <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
@@ -50,6 +50,35 @@
                             <textarea name="description" id="description" rows="12" required
                                       class="w-full px-4 py-2 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors"
                                       placeholder="Jelaskan detail project Anda"></textarea>
+                        </div>
+
+                        <!-- Detail Project Input -->
+                        <div class="space-y-2">
+                            <label for="detail" class="text-sm font-medium text-gray-700 flex items-center">
+                                <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
+                                </svg>
+                                Detail Project (PDF)
+                            </label>
+                            <div class="mt-1 flex justify-center px-6 pt-5 pb-6 border-2 border-gray-300 border-dashed rounded-xl hover:border-blue-500 transition-colors">
+                                <div class="space-y-1 text-center">
+                                    <svg class="mx-auto h-12 w-12 text-gray-400" stroke="currentColor" fill="none" viewBox="0 0 48 48">
+                                        <path d="M28 8H12a4 4 0 00-4 4v20m32-12v8m0 0v8a4 4 0 01-4 4H12a4 4 0 01-4-4v-4m32-4l-3.172-3.172a4 4 0 00-5.656 0L28 28M8 32l9.172-9.172a4 4 0 015.656 0L28 28m0 0l4 4m4-24h8m-4-4v8m-12 4h.02" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                    </svg>
+                                    <div class="flex text-sm text-gray-600">
+                                        <label for="file-upload" class="relative cursor-pointer bg-white rounded-md font-medium text-blue-600 hover:text-blue-500 focus-within:outline-none focus-within:ring-2 focus-within:ring-offset-2 focus-within:ring-blue-500">
+                                            <span>Upload file</span>
+                                            <input id="file-upload" name="detail" type="file" class="sr-only" accept=".pdf">
+                                        </label>
+                                        <p class="pl-1">atau drag and drop</p>
+                                    </div>
+                                    <p class="text-xs text-gray-500">PDF hingga 5MB</p>
+                                </div>
+                            </div>
+                            <div id="file-name" class="text-sm text-gray-500 mt-2"></div>
+                            @error('detail')
+                                <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
+                            @enderror
                         </div>
                     </div>
 
@@ -126,23 +155,68 @@
     </div>
 </div>
 
-<!-- Error Messages -->
-@if($errors->any())
-<div class="fixed bottom-4 right-4 bg-red-100 border-l-4 border-red-500 text-red-700 p-4 rounded-lg shadow-lg">
+<!-- Success Message -->
+@if(session('success'))
+<div class="fixed bottom-4 right-4 bg-green-100 border-l-4 border-green-500 text-green-700 p-4 rounded-lg shadow-lg" 
+     id="success-alert">
+    <div class="flex items-center">
+        <svg class="w-6 h-6 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
+        </svg>
+        <div>
+            <h3 class="font-medium">Berhasil!</h3>
+            <p>{{ session('success') }}</p>
+        </div>
+    </div>
+</div>
+
+<script>
+// Auto hide success alert after 3 seconds
+document.addEventListener('DOMContentLoaded', function() {
+    const successAlert = document.getElementById('success-alert');
+    if (successAlert) {
+        setTimeout(function() {
+            successAlert.style.transition = 'opacity 0.5s ease-out';
+            successAlert.style.opacity = '0';
+            setTimeout(function() {
+                successAlert.remove();
+            }, 500);
+        }, 3000);
+    }
+});
+</script>
+@endif
+
+<!-- Error Message -->
+@if(session('error'))
+<div class="fixed bottom-4 right-4 bg-red-100 border-l-4 border-red-500 text-red-700 p-4 rounded-lg shadow-lg"
+     id="error-alert">
     <div class="flex items-center">
         <svg class="w-6 h-6 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
         </svg>
         <div>
-            <h3 class="font-medium">Terjadi kesalahan:</h3>
-            <ul class="mt-1 list-disc list-inside">
-                @foreach ($errors->all() as $error)
-                    <li>{{ $error }}</li>
-                @endforeach
-            </ul>
+            <h3 class="font-medium">Error!</h3>
+            <p>{{ session('error') }}</p>
         </div>
     </div>
 </div>
+
+<script>
+// Auto hide error alert after 3 seconds
+document.addEventListener('DOMContentLoaded', function() {
+    const errorAlert = document.getElementById('error-alert');
+    if (errorAlert) {
+        setTimeout(function() {
+            errorAlert.style.transition = 'opacity 0.5s ease-out';
+            errorAlert.style.opacity = '0';
+            setTimeout(function() {
+                errorAlert.remove();
+            }, 500);
+        }, 3000);
+    }
+});
+</script>
 @endif
 
 <script>
@@ -166,6 +240,22 @@ document.addEventListener('DOMContentLoaded', function() {
             this.value = minDateFormatted;
         }
     });
+});
+
+document.getElementById('file-upload').addEventListener('change', function(e) {
+    const fileName = e.target.files[0]?.name;
+    const fileSize = (e.target.files[0]?.size / 1024 / 1024).toFixed(2); // Convert to MB
+    if (fileName) {
+        document.getElementById('file-name').innerHTML = `
+            <div class="flex items-center space-x-2">
+                <svg class="w-4 h-4 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
+                </svg>
+                <span class="text-blue-600">${fileName}</span>
+                <span class="text-gray-500">(${fileSize} MB)</span>
+            </div>
+        `;
+    }
 });
 </script>
 @endsection

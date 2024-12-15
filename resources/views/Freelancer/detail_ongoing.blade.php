@@ -48,6 +48,7 @@
         <div>
             <form action="{{ route('freelancer.update_status', $detailProject->id) }}" method="POST">
                 @csrf
+                @method('POST')
                 <label for="status" class="block text-sm font-medium text-gray-700">Update Status</label>
                 <select name="status" id="status" class="mt-1 block w-full rounded-md border-gray-300 text-gray-900" onchange="changeTextColor()">
                     <option value="in progress" class="text-yellow-500" {{ $detailProject->status == 'in progress' ? 'selected' : '' }}>In Progress!</option>

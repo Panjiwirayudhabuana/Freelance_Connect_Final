@@ -135,18 +135,15 @@ class FreelancerController extends Controller
     // Fungsi untuk memperbarui status proyek
     public function updateStatus(Request $request, $id)
     {
-        $request->validate([
-            'status' => 'required|in:in progress,done,cancelled',
-        ]);
+        try {
+            $detailProject = DetailProject::findOrFail($id);
+            $detailProject->status = $request->status;
+            $detailProject->save();
 
-        $detailProject = DetailProject::findOrFail($id);
-        $detailProject->status = $request->status;
-        $detailProject->save();
-
-        $project = Project::findOrFail($detailProject->project_id); // Ambil proyek terkait
-
-        return view('freelancer.detail_ongoing', compact('project', 'detailProject'))
-            ->with('success', 'Status proyek berhasil diperbarui.');
+            return redirect()->back()->with('success', 'Status berhasil diperbarui!');
+        } catch (\Exception $e) {
+            return redirect()->back()->with('error', 'Gagal memperbarui status: ' . $e->getMessage());
+        }
     }
 
     // Fungsi untuk mengunggah file submission
